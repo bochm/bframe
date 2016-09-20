@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx   
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<!-- 配置DataSource数据源 -->
+	<!-- 
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+	    <property name="jndiName" value="java:comp/env/${db.jndi}"/>
+  	</bean>	
+  	 -->
+  	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
+	    <property name="driverClassName" value="${db.driver}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+		
+		<!-- 配置连接池大小、最小、最大 -->
+		<property name="initialSize" value="${db.pool.init}" />
+		<property name="minIdle" value="${db.pool.minIdle}" /> 
+		<property name="maxActive" value="${db.pool.maxActive}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 测试链接 -->
+		<property name="testWhileIdle" value="false" />
+		<property name="validationQuery" value="${db.testSql}" />
+		
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小（Oracle使用）
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" /> -->
+		
+		<!-- 配置监控统计拦截的filters -->
+	    <property name="proxyFilters">
+        	<list>
+        		<bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+        			<property name="statementExecutableSqlLogEnable" value="true" />
+        			<property name="statementExecuteAfterLogEnabled" value="false" />
+        			<property name="statementCloseAfterLogEnabled" value="false" />
+        			<property name="resultSetOpenAfterLogEnabled" value="false" />
+        			<property name="resultSetCloseAfterLogEnabled" value="false" />
+        		</bean>
+        		<bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+				 <property name="mergeSql" value="true" />
+				 <property name="slowSqlMillis" value="3000" />
+				 <property name="logSlowSql" value="true" />
+				 </bean> 
+        	</list>
+    	</property>
+	</bean>
+	<!-- 配置SqlSessionFactoryBean -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:config/mybatis/mybatis.xml" />
+		<!-- mapper和resultmap配置路径 -->
+		<property name="mapperLocations">
+			<list>                
+				<value>classpath:${db.mapperlocation}</value>
+				<value>classpath:${db.custom.mapperlocation}</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 扫描目录在${app.package}.**.mapper目录下，所有继承SqlMapper的接口 -->    
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">      
+	  	<property name="basePackage" value="cn.bx.**.mapper;mappings"/>    
+	  	<property name="markerInterface" value="cn.bx.bframe.mapper.SqlMapper"/>    
+	</bean>
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+	<!-- 执行数据库操作模板 -->
+	<bean id="sqlMapperTemplet" class="cn.bx.bframe.mapper.SqlMapperTemplet">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    <!-- 声明式事务配置 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">  
+		<tx:attributes>  
+           <tx:method name="save*" propagation="REQUIRED" />  
+           <tx:method name="add*" propagation="REQUIRED" />  
+           <tx:method name="create*" propagation="REQUIRED" />  
+           <tx:method name="insert*" propagation="REQUIRED" />  
+           <tx:method name="update*" propagation="REQUIRED" />  
+           <tx:method name="merge*" propagation="REQUIRED" />  
+           <tx:method name="del*" propagation="REQUIRED" />  
+           <tx:method name="remove*" propagation="REQUIRED" />  
+           <tx:method name="put*" propagation="REQUIRED" />  
+           <tx:method name="get*" propagation="SUPPORTS" read-only="true" />  
+           <tx:method name="count*" propagation="SUPPORTS" read-only="true" />  
+          <tx:method name="find*" propagation="SUPPORTS" read-only="true" />  
+          <tx:method name="list*" propagation="SUPPORTS" read-only="true" />  
+          <tx:method name="query*" propagation="SUPPORTS" read-only="true" />
+          <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+          <tx:method name="*" propagation="SUPPORTS" read-only="true" />  
+       </tx:attributes>  
+	</tx:advice>  
+	<!-- 事务切入点 -->
+	<aop:config>  
+       <aop:pointcut id="txPointcut" expression="${tx.expression}" />
+       <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />  
+	</aop:config> 
+</beans>
