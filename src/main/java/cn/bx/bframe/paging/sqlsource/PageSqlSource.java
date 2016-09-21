@@ -13,7 +13,6 @@ public abstract class PageSqlSource implements SqlSource {
     public void setParser(Parser parser) {
         localParser.set(parser);
     }
-
     /**
      * 返回值null - 普通,true - count,false - page
      *
