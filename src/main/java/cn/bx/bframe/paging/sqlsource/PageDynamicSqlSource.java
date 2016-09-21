@@ -40,7 +40,10 @@ public class PageDynamicSqlSource extends PageSqlSource implements Constant {
         }
         return boundSql;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3d41881671dd1682a33be226c398bb14bc4a09a5
     @Override
     protected BoundSql getCountBoundSql(Object parameterObject) {
         DynamicContext context = new DynamicContext(configuration, parameterObject);

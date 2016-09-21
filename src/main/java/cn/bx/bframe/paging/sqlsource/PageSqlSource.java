@@ -22,7 +22,10 @@ public abstract class PageSqlSource implements SqlSource {
     protected Boolean getCount() {
         return SqlUtil.getCOUNT();
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3d41881671dd1682a33be226c398bb14bc4a09a5
     /**
      * 获取正常的BoundSql
      *

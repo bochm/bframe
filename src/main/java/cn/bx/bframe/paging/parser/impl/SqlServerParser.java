@@ -14,7 +14,10 @@ import cn.bx.bframe.paging.parser.SqlServer;
 
 public class SqlServerParser extends AbstractParser {
     private static final SqlServer pageSql = new SqlServer();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3d41881671dd1682a33be226c398bb14bc4a09a5
     @Override
     public boolean isSupportedMappedStatementCache() {
         //由于sqlserver每次分页参数都是直接写入到sql语句中，因此不能缓存MS
