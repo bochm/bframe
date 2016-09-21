@@ -12,10 +12,9 @@
     <name>bframe</name>
     <url>http://www.maven.org</url>
 	<dependencies>
-<<<<<<< HEAD
-=======
+
 		<!-- github 测试-->
->>>>>>> 3d41881671dd1682a33be226c398bb14bc4a09a5
+
 		<!-- apache commons -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
