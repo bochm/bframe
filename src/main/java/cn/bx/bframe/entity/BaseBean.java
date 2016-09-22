@@ -31,6 +31,7 @@ public class BaseBean implements Serializable {
 	}
 	@JsonIgnore
 	public String getCreateBy() {
+		if(createBy == null) setCreateBy("");
 		return createBy;
 	}
 
