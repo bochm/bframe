@@ -20,8 +20,16 @@ public class BaseBean implements Serializable {
 	protected Date updateDate;	// 更新日期
 	protected int sort; //排序编号
 	protected String status;//状态  1启用  0停用
+	protected String form_action;//表单提交操作 add save delete
 	
-	
+	public String getForm_action() {
+		return form_action;
+	}
+
+	public void setForm_action(String form_action) {
+		this.form_action = form_action;
+	}
+
 	public String getRemarks() {
 		return remarks;
 	}
@@ -91,7 +99,14 @@ public class BaseBean implements Serializable {
 	}
 	
 	public String getId(){
-		if(this.id == null) setId(IdGen.uuid());
+		if(isNewRecord()) setId(IdGen.uuid());
 		return this.id;
 	}
+
+	public boolean isNewRecord() {
+		return "add".equals(form_action);
+	}
+
+	
+	
 }
