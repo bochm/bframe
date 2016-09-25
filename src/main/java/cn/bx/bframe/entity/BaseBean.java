@@ -7,6 +7,7 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import cn.bx.bframe.common.util.IdGen;
+import cn.bx.bframe.system.utils.UserUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -39,7 +40,7 @@ public class BaseBean implements Serializable {
 	}
 	@JsonIgnore
 	public String getCreateBy() {
-		if(createBy == null) setCreateBy("");
+		if(createBy == null) setCreateBy(UserUtils.getUser().getId());
 		return createBy;
 	}
 
@@ -57,6 +58,7 @@ public class BaseBean implements Serializable {
 	}
 	@JsonIgnore
 	public String getUpdateBy() {
+		if(updateBy == null) setUpdateBy(UserUtils.getUser().getId());
 		return updateBy;
 	}
 
