@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.springframework.util.StringUtils;
 
 import cn.bx.bframe.common.util.IdGen;
 import cn.bx.bframe.system.utils.UserUtils;
@@ -106,7 +107,7 @@ public class BaseBean implements Serializable {
 	}
 
 	public boolean isNewRecord() {
-		return "add".equals(form_action);
+		return "add".equals(form_action) && StringUtils.isEmpty(this.id);
 	}
 
 	
