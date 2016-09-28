@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.HandlerMapping;
 
+import cn.bx.bframe.system.utils.UserUtils;
+
 
 @Controller
 public class PagesController {
@@ -24,7 +26,7 @@ public class PagesController {
 	}
 	@RequestMapping("/login")
 	public String login(){
-		return loginUrl;
+		return UserUtils.getUser().getId() != null ? indexUrl : loginUrl;
 	}
 	@RequestMapping("${pages.url}**")
 	public String pages(HttpServletRequest request) {
