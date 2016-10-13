@@ -23,7 +23,7 @@ public class BaseBean implements Serializable {
 	protected int sort; //排序编号
 	protected String status;//状态  1启用  0停用
 	protected String form_action;//表单提交操作 add save delete
-	
+	@JsonIgnore
 	public String getForm_action() {
 		return form_action;
 	}
@@ -105,7 +105,7 @@ public class BaseBean implements Serializable {
 		if(isNewRecord()) setId(IdGen.uuid());
 		return this.id;
 	}
-
+	@JsonIgnore
 	public boolean isNewRecord() {
 		return "add".equals(form_action) && StringUtils.isEmpty(this.id);
 	}
