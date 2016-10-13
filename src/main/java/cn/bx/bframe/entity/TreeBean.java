@@ -1,10 +1,9 @@
 package cn.bx.bframe.entity;
 import org.apache.commons.lang3.StringUtils;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import cn.bx.bframe.common.util.Reflections;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 public abstract class TreeBean<T> extends BaseBean{
 	private static final long serialVersionUID = 1L;
 	protected T parent;
@@ -17,11 +16,6 @@ public abstract class TreeBean<T> extends BaseBean{
 	}
 	public void setParentIds(String parentIds) {
 		this.parentIds = parentIds;
-	}
-	//树形排序字段,用来显示treetable
-	@JsonProperty("treeSort")
-	public String getTreeSort() {
-		return this.parentIds + "-" + this.sort + "-" +  this.id;
 	}
 	public String getParentId() {
 		String id = null;
