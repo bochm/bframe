@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public abstract class TreeBean<T extends BaseBean> extends BaseBean{
 	private static final long serialVersionUID = 1L;
 	protected T parent;
+	protected String parentId;//父对象id
 	protected String parentIds;//所有父对象id,以,连接
 	public TreeBean(){
 		this.sort = 9;
@@ -26,11 +27,16 @@ public abstract class TreeBean<T extends BaseBean> extends BaseBean{
 		this.parentIds = parentIds;
 	}
 	public String getParentId() {
-		String id = null;
-		if (parent != null){
-			id = parent.getId();
+		if (parent != null && parentId == null){
+			parentId = parent.getId();
 		}
-		return StringUtils.isNotEmpty(id) ? id : "";
+		return StringUtils.isNotEmpty(parentId) ? parentId : "";
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+		if (parent != null){
+			parent.setId(parentId);
+		}
 	}
 	//树形为了排序将sort加在id之前
 	public String getId(){
