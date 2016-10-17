@@ -2,7 +2,9 @@ package cn.bx.bframe.service;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.bx.bframe.entity.TreeBean;
 import cn.bx.bframe.mapper.TreeSqlMapper;
@@ -13,15 +15,21 @@ public abstract class DefaultTreeService<M extends TreeSqlMapper<T>,T extends Tr
 	}
 	
 	public int save(T tree) {
-		if(getMapper().save(tree) == 1){
-			getMapper().updateChildren(tree);
-			getMapper().updateParents(tree);
-			return 1;
+		String id = tree.getId();
+		T before = this.get(id);
+		int updated = getMapper().save(tree);
+		if(updated == 1 && before != null && (!before.getParentId().equals(tree.getParentId())||before.getSort() != tree.getSort())){ //修改父节点
+			Map<String,Object> param = new HashMap<String,Object>();
+			param.put("old", before);
+			param.put("new", tree);
+			getMapper().updateChildren(param);
+			tree.setId(tree.getNewId());
+			tree.setOldId(id);
 		}
-		return 0;
+		return updated;
 	}
 
-	public int remove(Serializable id) {
+	public int removeWithChildren(Serializable id) {
 		T tree = get(id);
 		if(tree != null && tree.getId() != null){
 			getMapper().removeChildren(tree);
@@ -29,7 +37,7 @@ public abstract class DefaultTreeService<M extends TreeSqlMapper<T>,T extends Tr
 		}
 		return 0;
 	}
-	public int removeList(Collection<Serializable> ids) {
+	public int removeListWithChildren(Collection<Serializable> ids) {
 		List<T> list = this.list(ids);
 		for(T tree : list){
 			if(tree != null && tree.getId() != null){
