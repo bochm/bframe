@@ -23,8 +23,6 @@ public abstract class DefaultTreeService<M extends TreeSqlMapper<T>,T extends Tr
 			param.put("old", before);
 			param.put("new", tree);
 			getMapper().updateChildren(param);
-			tree.setId(tree.getNewId());
-			tree.setOldId(id);
 		}
 		return updated;
 	}
