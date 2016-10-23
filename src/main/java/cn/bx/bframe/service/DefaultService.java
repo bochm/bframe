@@ -1,7 +1,6 @@
 package cn.bx.bframe.service;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,7 @@ public abstract class DefaultService<M extends SqlMapper<T>, T extends BaseBean>
 		return getMapper().remove(id);
 	}
 	
-	public int removeList(Collection<Serializable> ids) {
+	public int removeList(String[] ids) {
 		return getMapper().removeList(ids);
 	}
 }

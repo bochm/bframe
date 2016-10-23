@@ -1,9 +1,7 @@
 package cn.bx.bframe.service;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.bx.bframe.entity.TreeBean;
@@ -28,19 +26,12 @@ public abstract class DefaultTreeService<M extends TreeSqlMapper<T>,T extends Tr
 	}
 
 	public int removeWithChildren(Serializable id) {
-		T tree = get(id);
-		if(tree != null && tree.getId() != null){
-			getMapper().removeChildren(tree);
-			return getMapper().remove(id);
-		}
-		return 0;
+		getMapper().removeChildren(id);
+		return getMapper().remove(id);
 	}
-	public int removeListWithChildren(Collection<Serializable> ids) {
-		List<T> list = this.list(ids);
-		for(T tree : list){
-			if(tree != null && tree.getId() != null){
-				getMapper().removeChildren(tree);
-			}
+	public int removeListWithChildren(String[] ids) {
+		for(Serializable id : ids){
+			getMapper().removeChildren(id);
 		}
 		return getMapper().removeList(ids);
 	}
