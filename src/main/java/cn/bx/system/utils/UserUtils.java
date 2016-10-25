@@ -1,4 +1,4 @@
-package cn.bx.bframe.system.utils;
+package cn.bx.system.utils;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
@@ -10,8 +10,8 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
 import cn.bx.bframe.common.spring.SpringContextHolder;
-import cn.bx.bframe.system.entity.LoginUser;
-import cn.bx.bframe.system.entity.User;
+import cn.bx.system.entity.LoginUser;
+import cn.bx.system.entity.User;
 
 public class UserUtils {
 	public static final String USER_CACHE = "sys-userCache";

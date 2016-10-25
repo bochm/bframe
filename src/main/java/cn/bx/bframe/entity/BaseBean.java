@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.StringUtils;
 
 import cn.bx.bframe.common.util.IdGen;
-import cn.bx.bframe.system.utils.UserUtils;
+import cn.bx.system.utils.UserUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

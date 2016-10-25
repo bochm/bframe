@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.HandlerMapping;
 
-import cn.bx.bframe.system.utils.UserUtils;
+import cn.bx.system.utils.UserUtils;
 
 
 @Controller

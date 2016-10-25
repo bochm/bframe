@@ -1,4 +1,4 @@
-package cn.bx.bframe.system.entity;
+package cn.bx.system.entity;
 
 import java.util.Date;
 
