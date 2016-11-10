@@ -9,7 +9,7 @@ public abstract class TreeBean<T extends BaseBean> extends BaseBean{
 	protected String parentId;//父对象id
 	protected String parentTree;//树形排序.所有祖先节点的sort-id用,相连
 	public TreeBean(){
-		this.sort = 9;
+		this.sort = 10;
 	}
 	@JsonBackReference
 	public abstract T getParent();
