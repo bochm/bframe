@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,10 +52,7 @@ public class CommonController {
 	@RequestMapping("/selectArrayByStmID")
 	@SuppressWarnings("unchecked")
 	public @ResponseBody List<Map<String,Object>> queryArrayByStmID(@RequestBody Map<String,Object> parameter) {
-		String stmID = String.valueOf(parameter.get("stmID"));
-		Map<String,String> param = (Map<String,String>)parameter.get("param");
-		List<Map<String,Object>> ret = (List<Map<String, Object>>) sqlMapperTemplet.selectList(stmID, param);
-		return ret;
+		return (List<Map<String, Object>>) sqlMapperTemplet.selectList(getStmId(parameter), (Map<String,String>)parameter.get("param"));
 	}
 	
 	/*
@@ -63,9 +61,21 @@ public class CommonController {
 	@RequestMapping("/selectMapByStmID")
 	@SuppressWarnings("unchecked")
 	public @ResponseBody Map<String,Object> queryMapByStmID(@RequestBody Map<String,Object> parameter) {
-		String stmID = String.valueOf(parameter.get("stmID"));
-		Map<String,String> param = (Map<String,String>)parameter.get("param");
-		Map<String,Object> ret = sqlMapperTemplet.selectMap(stmID, param);
-		return ret;
+		return sqlMapperTemplet.selectMap(getStmId(parameter), (Map<String,String>)parameter.get("param"));
+	}
+	
+	/*
+	 * 根据sqlMapper中的stmID获取数据数据
+	 */
+	@RequestMapping("/selectMapListByStmID")
+	@SuppressWarnings("unchecked")
+	public @ResponseBody Map<String,Object> queryMapListByStmID(@RequestBody Map<String,Object> parameter) {
+		return sqlMapperTemplet.selectMapList(getStmId(parameter),  (Map<String,String>)parameter.get("param"),
+				String.valueOf(parameter.get("key")));
+	}
+	
+	private String getStmId(Map<String,Object> parameter){
+		return String.valueOf(StringUtils.isEmpty(parameter.get("stmID")) ? 
+				(StringUtils.isEmpty(parameter.get("stmId")) ? parameter.get("stmid") : parameter.get("stmId") ) : parameter.get("stmID")) ;
 	}
 }
