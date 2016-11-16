@@ -6,8 +6,8 @@ import cn.bx.bframe.entity.BaseBean;
 
 public class User extends BaseBean{
 	private static final long serialVersionUID = 1L;
-	private String companyId;	//公司
-	private String deptId;	// 部门
+	private Org company;	//公司
+	private Org dept;	// 部门
 	private String loginName;// 登录名
 	private String password;// 密码
 	private String no;		// 工号
@@ -20,17 +20,18 @@ public class User extends BaseBean{
 	private Date loginDate;	// 最后登陆日期
 	private String loginFlag;	// 是否允许登陆
 	private String photo;	// 照片
-	public String getCompanyId() {
-		return companyId;
+	
+	public Org getCompany() {
+		return company;
 	}
-	public void setCompanyId(String companyId) {
-		this.companyId = companyId;
+	public void setCompany(Org company) {
+		this.company = company;
 	}
-	public String getDeptId() {
-		return deptId;
+	public Org getDept() {
+		return dept;
 	}
-	public void setDeptId(String deptId) {
-		this.deptId = deptId;
+	public void setDept(Org dept) {
+		this.dept = dept;
 	}
 	public String getLoginName() {
 		return loginName;
