@@ -10,7 +10,6 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
 import cn.bx.bframe.common.spring.SpringContextHolder;
-import cn.bx.system.entity.LoginUser;
 import cn.bx.system.entity.User;
 
 public class UserUtils {
@@ -81,21 +80,6 @@ public class UserUtils {
 	private static <K, V> Cache<K,V> getCache(String cacheName){
 		return cacheManager.getCache(cacheName);
 	}
-	/**
-	 * 获取当前用户
-	 * @return 取不到返回 new User()
-	 */
-	public static User getUser(){
-		LoginUser loginUser = getLoginUser();
-		if (loginUser!=null){
-			User user = loginUser.getUser();
-			if (user != null){
-				return user;
-			}
-			return new User();
-		}
-		return new User();
-	}
 	
 	/**
 	 * 获取授权主要对象
@@ -107,11 +91,11 @@ public class UserUtils {
 	/**
 	 * 获取当前登录用户
 	 */
-	public static LoginUser getLoginUser(){
+	public static User getUser(){
 		try{
-			LoginUser loginuser = (LoginUser)getSubject().getPrincipal();
-			if (loginuser != null){
-				return loginuser;
+			User user = (User)getSubject().getPrincipal();
+			if (user != null){
+				return user;
 			}
 		}catch (UnavailableSecurityManagerException e) {
 			

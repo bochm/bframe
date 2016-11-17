@@ -20,7 +20,7 @@ public class User extends BaseBean{
 	private Date loginDate;	// 最后登陆日期
 	private String loginFlag;	// 是否允许登陆
 	private String photo;	// 照片
-	
+	private String rsToken;//rs请求使用的token
 	public Org getCompany() {
 		return company;
 	}
@@ -104,6 +104,12 @@ public class User extends BaseBean{
 	}
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+	public String getRsToken() {
+		return rsToken;
+	}
+	public void setRsToken(String rsToken) {
+		this.rsToken = rsToken;
 	}
 
 	
