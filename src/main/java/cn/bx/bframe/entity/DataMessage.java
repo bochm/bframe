@@ -17,6 +17,11 @@ public class DataMessage implements Serializable{
 		this.data = data;
 		this.status = status;
 	}
+	public DataMessage(String message,Object data,int status){
+		this.message = message;
+		this.data = data;
+		this.status = String.valueOf(status);
+	}
 	@JsonProperty(AppConstants.RET_MESSAGE)
 	public String getMessage() {
 		return message;
@@ -41,6 +46,10 @@ public class DataMessage implements Serializable{
 	@JsonProperty("OK")
 	public boolean isSeccuss(){
 		return AppConstants.RET_SECCUSS.equals(status);
+	}
+	@JsonProperty("ERROR")
+	public boolean isErr(){
+		return !AppConstants.RET_SECCUSS.equals(status);
 	}
 	public static DataMessage success(String message,Object data){
 		return new DataMessage(message,data,AppConstants.RET_SECCUSS); 

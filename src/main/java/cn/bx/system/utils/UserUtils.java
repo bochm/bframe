@@ -43,7 +43,14 @@ public class UserUtils {
 	public static User getUserByLoginName(String loginname) {
 		return (User)getCache(USER_CACHE).get(USER_CACHE_LOGIN_NAME_+loginname);
 	}
-	
+	/**
+	 * 获取用户缓存
+	 * @param username
+	 * @return
+	 */
+	public static User getUserById(String id) {
+		return (User)getCache(USER_CACHE).get(USER_CACHE_ID_+id);
+	}
 	/**
 	 * 获取缓存
 	 * @param cacheName
