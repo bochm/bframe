@@ -7,6 +7,7 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.StringUtils;
 
+import cn.bx.bframe.common.config.AppConstants;
 import cn.bx.bframe.common.util.IdGen;
 import cn.bx.system.utils.UserUtils;
 
@@ -79,9 +80,9 @@ public class BaseBean implements Serializable {
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	//默认为1
 	public String getStatus() {
-		return status;
+		return status == null ? AppConstants.YES : status;
 	}
 
 	public void setStatus(String status) {
