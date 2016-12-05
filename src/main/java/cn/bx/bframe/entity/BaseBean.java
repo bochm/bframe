@@ -7,11 +7,11 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import cn.bx.bframe.common.config.AppConstants;
 import cn.bx.bframe.common.util.IdGen;
 import cn.bx.system.utils.UserUtils;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BaseBean implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -42,7 +42,7 @@ public class BaseBean implements Serializable {
 	}
 	@JsonIgnore
 	public String getCreateBy() {
-		if(createBy == null) setCreateBy(UserUtils.getUser().getId());
+		if(createBy == null) setCreateBy(UserUtils.getUserId());
 		return createBy;
 	}
 
@@ -60,7 +60,7 @@ public class BaseBean implements Serializable {
 	}
 	@JsonIgnore
 	public String getUpdateBy() {
-		if(updateBy == null) setUpdateBy(UserUtils.getUser().getId());
+		if(updateBy == null) setUpdateBy(UserUtils.getUserId());
 		return updateBy;
 	}
 

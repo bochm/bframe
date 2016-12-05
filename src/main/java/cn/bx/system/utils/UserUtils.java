@@ -1,5 +1,8 @@
 package cn.bx.system.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.cache.Cache;
@@ -10,46 +13,130 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
 import cn.bx.bframe.common.spring.SpringContextHolder;
-import cn.bx.system.entity.User;
 
 public class UserUtils {
+	public static final String FIELD_TOKEN = "rsToken";
+    public static final String FIELD_LOGINNAME = "loginname";
+    public static final String FIELD_PASSWORD = "password";
+    public static final String FIELD_USERNAME = "username";
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_STATUS = "status";
+    
 	public static final String USER_CACHE = "sys-userCache";
 	public static final String PWD_RETRY_CACHE = "sys-passwordRetryCache";
 	public static final String USER_CACHE_ID_ = "id_";
 	public static final String USER_CACHE_LOGIN_NAME_ = "ln_";
-	public static final String USER_CACHE_LIST_BY_OFFICE_ID_ = "oid_";
 
 	public static final String CACHE_ROLE_LIST = "roleList";
 	public static final String CACHE_MENU_LIST = "menuList";
-	public static final String CACHE_AREA_LIST = "areaList";
-	public static final String CACHE_OFFICE_LIST = "officeList";
-	public static final String CACHE_OFFICE_ALL_LIST = "officeAllList";
 	private static CacheManager cacheManager = ((EhCacheManager)SpringContextHolder.getBean("shiroCacheManager"));
 	
+	//------user get set方法-----不使用User实体类改为Map实现
+	public static String getPassword(Map<String,String> user) {
+		if(user == null) return null;
+		return user.get(FIELD_PASSWORD);
+	}
+	public static String getLoginName(Map<String,String> user) {
+		if(user == null) return null;
+		return user.get(FIELD_LOGINNAME);
+	}
+	public static String getUserName(Map<String,String> user) {
+		if(user == null) return null;
+		return user.get(FIELD_USERNAME);
+	}
+	public static String getUserId(Map<String,String> user) {
+		if(user == null) return null;
+		return user.get(FIELD_ID);
+	}
+	public static String getToken(Map<String,String> user) {
+		if(user == null) return null;
+		return user.get(FIELD_TOKEN);
+	}
+	public static String getStatus(Map<String,String> user) {
+		if(user == null) return null;
+		return user.get(FIELD_STATUS);
+	}
+	public static void setPassword(Map<String,String> user,String password) {
+		if(user!=null)user.put(FIELD_PASSWORD, password);
+	}
+	public static void setLoginName(Map<String,String> user,String loginname) {
+		if(user!=null)user.put(FIELD_LOGINNAME, loginname);
+	}
+	public static void setUserName(Map<String,String> user,String username) {
+		if(user!=null)user.put(FIELD_USERNAME, username);
+	}
+	public static void setUserId(Map<String,String> user,String id) {
+		if(user!=null)user.put(FIELD_ID, id);
+	}
+	public static void setToken(Map<String,String> user,String token) {
+		if(user!=null)user.put(FIELD_TOKEN, token);
+	}
+	public static void setStatus(Map<String,String> user,String status) {
+		if(user!=null)user.put(FIELD_STATUS, status);
+	}
+	//-------获取当前会话中的user---------------------
+	public static String getPassword() {
+		return getPassword(getUser());
+	}
+	public static String getLoginName() {
+		return getLoginName(getUser());
+	}
+	public static String getUserName() {
+		return getUserName(getUser());
+	}
+	public static String getUserId() {
+		return getUserId(getUser());
+	}
+	public static String getToken() {
+		return getToken(getUser());
+	}
+	public static String getStatus() {
+		return getStatus(getUser());
+	}
+	public static void setPassword(String password) {
+		setPassword(getUser(),password);
+	}
+	public static void setLoginName(String loginname) {
+		setLoginName(getUser(),loginname);
+	}
+	public static void setUserName(String username) {
+		setUserName(getUser(),username);
+	}
+	public static void setUserId(String id) {
+		setUserId(getUser(),id);
+	}
+	public static void setToken(String token) {
+		setToken(getUser(),token);
+	}
+	public static void setStatus(String status) {
+		setStatus(getUser(),status);
+	}
 	/**
-	 * 获取用户缓存
+	 * 增加用户缓存
 	 * @param username
 	 * @return
 	 */
-	public static void putUserInCache(User user) {
-		putInCache(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
-		putInCache(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
+	public static void putUserInCache(Map<String,String> user) {
+		putInCache(USER_CACHE, USER_CACHE_ID_ + user.get(FIELD_ID), user);
+		putInCache(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.get(FIELD_LOGINNAME), user);
 	}
 	/**
 	 * 获取用户缓存
-	 * @param username
+	 * @param loginname
 	 * @return
 	 */
-	public static User getUserByLoginName(String loginname) {
-		return (User)getCache(USER_CACHE).get(USER_CACHE_LOGIN_NAME_+loginname);
+	@SuppressWarnings("unchecked")
+	public static HashMap<String,String> getUserByLoginName(String loginname) {
+		return (HashMap<String,String>)getCache(USER_CACHE).get(USER_CACHE_LOGIN_NAME_+loginname);
 	}
 	/**
 	 * 获取用户缓存
-	 * @param username
+	 * @param id
 	 * @return
 	 */
-	public static User getUserById(String id) {
-		return (User)getCache(USER_CACHE).get(USER_CACHE_ID_+id);
+	@SuppressWarnings("unchecked")
+	public static HashMap<String,String> getUserById(String id) {
+		return (HashMap<String,String>)getCache(USER_CACHE).get(USER_CACHE_ID_+id);
 	}
 	/**
 	 * 获取缓存
@@ -98,9 +185,10 @@ public class UserUtils {
 	/**
 	 * 获取当前登录用户
 	 */
-	public static User getUser(){
+	@SuppressWarnings("unchecked")
+	public static Map<String,String> getUser(){
 		try{
-			User user = (User)getSubject().getPrincipal();
+			Map<String,String> user = (Map<String,String>)getSubject().getPrincipal();
 			if (user != null){
 				return user;
 			}

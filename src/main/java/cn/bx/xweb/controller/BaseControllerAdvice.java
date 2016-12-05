@@ -1,5 +1,7 @@
 package cn.bx.xweb.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -8,13 +10,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bx.bframe.entity.DataMessage;
-import cn.bx.system.entity.User;
+import cn.bx.system.utils.UserUtils;
 
 @ControllerAdvice
 public class BaseControllerAdvice {
 	 @ModelAttribute  
-	 public User newUser() {   
-		 return new User();  
+	 public Map<String,String> user() {   
+		 return UserUtils.getUser();  
 	 }  
 	 @ExceptionHandler(Exception.class)  
 	 public @ResponseBody DataMessage acceptException(Exception e) {  
