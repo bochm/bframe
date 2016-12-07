@@ -42,6 +42,10 @@ public class AppConstants {
 	 */
 	public static final String TRUE = "true";
 	public static final String FALSE = "false";
+	/**
+	 * 访问方法资源受限错误(如方法级别的注解授权失败)
+	 */
+	public static final int HTTP_CODE_UNAUTHORIZED = 421;
 	@JsonIgnore
 	private static AppConstants _instance = new AppConstants();
 	@JsonIgnore

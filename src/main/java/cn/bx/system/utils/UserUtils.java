@@ -2,6 +2,7 @@ package cn.bx.system.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
@@ -27,8 +28,8 @@ public class UserUtils {
 	public static final String USER_CACHE_ID_ = "id_";
 	public static final String USER_CACHE_LOGIN_NAME_ = "ln_";
 
-	public static final String CACHE_ROLE_LIST = "roleList";
-	public static final String CACHE_MENU_LIST = "menuList";
+	public static final String ROLE_CACHE = "sys-roleCache";
+	public static final String PERMISSION_CACHE = "sys-permissionCache";
 	private static CacheManager cacheManager = ((EhCacheManager)SpringContextHolder.getBean("shiroCacheManager"));
 	
 	//------user get set方法-----不使用User实体类改为Map实现
@@ -138,6 +139,53 @@ public class UserUtils {
 	public static HashMap<String,String> getUserById(String id) {
 		return (HashMap<String,String>)getCache(USER_CACHE).get(USER_CACHE_ID_+id);
 	}
+	
+	/**
+	 * 增加角色缓存
+	 * @param userId
+	 * @param rules
+	 */
+	public static void putRoleInCache(String userId,Set<String> rules) {
+		putInCache(ROLE_CACHE, userId, rules);
+	}
+	/**
+	 * 增加权限缓存
+	 * @param userId
+	 * @param rp
+	 */
+	public static void putPermissionInCache(String userId,Set<String> permissions) {
+		putInCache(PERMISSION_CACHE, userId, permissions);
+	}
+	/**
+	 * 获取角色缓存
+	 * @param userId
+	 */
+	@SuppressWarnings("unchecked")
+	public static Set<String> getRoleFromCache(String userId) {
+		return (Set<String>)getCache(ROLE_CACHE).get(userId);
+	}
+	/**
+	 * 获取授权缓存
+	 * @param userId
+	 */
+	@SuppressWarnings("unchecked")
+	public static Set<String> getPermissionFromCache(String userId) {
+		return (Set<String>)getCache(PERMISSION_CACHE).get(userId);
+	}
+	/**
+	 * 获取角色缓存
+	 */
+	@SuppressWarnings("unchecked")
+	public static Set<String> getRoleFromCache() {
+		return (Set<String>)getCache(ROLE_CACHE).get(getUserId());
+	}
+	/**
+	 * 获取授权缓存
+	 */
+	@SuppressWarnings("unchecked")
+	public static Set<String> getPermissionFromCache() {
+		return (Set<String>)getCache(PERMISSION_CACHE).get(getUserId());
+	}
 	/**
 	 * 获取缓存
 	 * @param cacheName
@@ -158,6 +206,38 @@ public class UserUtils {
 		getCache(cacheName).put(key,value);
 	}
 
+	/**
+	 * 清空user缓存
+	 */
+	public static void clearUserCache() {
+		getCache(USER_CACHE).clear();
+	}
+	public static void removeUserFromCache(Map<String,String> user) {
+		if(user!=null){
+			getCache(USER_CACHE).remove(USER_CACHE_ID_ + user.get(FIELD_ID));
+			getCache(USER_CACHE).remove(USER_CACHE_LOGIN_NAME_ + user.get(FIELD_LOGINNAME));
+		}
+	}
+	public static void removeUserFromCache(String loginname) {
+		removeUserFromCache(getUserByLoginName(loginname));
+	}
+	public static void removeCurrentUserFromCache() {
+		removeUserFromCache(getUser());
+	}
+	
+	/**
+	 * 清空RULE缓存
+	 */
+	public static void clearRuleCache() {
+		getCache(ROLE_CACHE).clear();
+	}
+	/**
+	 * 清空PERMISSIONS缓存
+	 */
+	public static void clearPermissionCache() {
+		getCache(PERMISSION_CACHE).clear();
+	}
+	
 	/**
 	 * 从缓存中移除
 	 * @param cacheName
