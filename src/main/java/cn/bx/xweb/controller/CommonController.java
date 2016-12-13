@@ -8,15 +8,15 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import cn.bx.bframe.common.config.AppConstants;
 import cn.bx.bframe.mapper.SqlMapperTemplet;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 通用请求处理
@@ -49,33 +49,35 @@ public class CommonController {
 	/*
 	 * 根据sqlMapper中的stmID获取数据数据
 	 */
-	@RequestMapping("/selectArrayByStmID")
+	@RequestMapping("/selectArrayByStmID/{stmid}")
 	@SuppressWarnings("unchecked")
-	public @ResponseBody List<Map<String,Object>> queryArrayByStmID(@RequestBody Map<String,Object> parameter) {
-		return (List<Map<String, Object>>) sqlMapperTemplet.selectList(getStmId(parameter), (Map<String,String>)parameter.get("param"));
+	public @ResponseBody List<Map<String,Object>> queryArrayByStmID(@PathVariable("stmid") String stmid,@RequestBody Map<String,Object> parameter) {
+		return (List<Map<String, Object>>) sqlMapperTemplet.selectList(stmid, getParam(parameter));
 	}
 	
 	/*
 	 * 根据sqlMapper中的stmID获取数据数据
 	 */
-	@RequestMapping("/selectMapByStmID")
-	@SuppressWarnings("unchecked")
-	public @ResponseBody Map<String,Object> queryMapByStmID(@RequestBody Map<String,Object> parameter) {
-		return sqlMapperTemplet.selectMap(getStmId(parameter), (Map<String,String>)parameter.get("param"));
+	@RequestMapping("/selectMapByStmID/{stmid}")
+	public @ResponseBody Map<String,Object> queryMapByStmID(@PathVariable("stmid") String stmid,@RequestBody Map<String,Object> parameter) {
+		return sqlMapperTemplet.selectMap(stmid, getParam(parameter));
 	}
 	
 	/*
 	 * 根据sqlMapper中的stmID获取数据数据
 	 */
-	@RequestMapping("/selectMapListByStmID")
-	@SuppressWarnings("unchecked")
-	public @ResponseBody Map<String,Object> queryMapListByStmID(@RequestBody Map<String,Object> parameter) {
-		return sqlMapperTemplet.selectMapList(getStmId(parameter),  (Map<String,String>)parameter.get("param"),
+	@RequestMapping("/selectMapListByStmID/{stmid}")
+	public @ResponseBody Map<String,Object> queryMapListByStmID(@PathVariable("stmid") String stmid,@RequestBody Map<String,Object> parameter) {
+		return sqlMapperTemplet.selectMapList(stmid,  getParam(parameter),
 				String.valueOf(parameter.get("key")));
 	}
 	
-	private String getStmId(Map<String,Object> parameter){
-		return String.valueOf(StringUtils.isEmpty(parameter.get("stmID")) ? 
-				(StringUtils.isEmpty(parameter.get("stmId")) ? parameter.get("stmid") : parameter.get("stmId") ) : parameter.get("stmID")) ;
+	@SuppressWarnings({ "unchecked"})
+	private Map<String,String> getParam(Map<String,Object> parameter){
+		if(parameter.containsKey("param")) return (Map<String,String>)parameter.get("param");
+		else if(parameter.containsKey("para")) return (Map<String,String>)parameter.get("para");
+		else if(parameter.containsKey("params")) return (Map<String,String>)parameter.get("params");
+		else if(parameter.containsKey("parameter")) return (Map<String,String>)parameter.get("parameter");
+		else return null;
 	}
 }
