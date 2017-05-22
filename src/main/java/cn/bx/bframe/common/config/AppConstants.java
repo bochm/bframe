@@ -12,7 +12,7 @@ public class AppConstants {
 	@JsonProperty("USER")
 	public static final String AUTHENTICATION_KEY = "_USER_SESSION_AUTHENTICATION";
 	@JsonProperty("OK")
-	public static final String RET_SECCUSS = "seccuss";
+	public static final String RET_SECCUSS = "200";
 	@JsonProperty("FAIL")
 	public static final String RET_FAIL = "fail";
 	@JsonProperty("WORN")
@@ -22,7 +22,7 @@ public class AppConstants {
 	@JsonProperty("MSG")
 	public static final String RET_MESSAGE = "message";
 	@JsonProperty("ERROR")
-	public static final String RET_ERROR = "error";
+	public static final String RET_ERROR = "500";
 	@JsonProperty("DATA")
 	public static final String RET_DATA = "data";
 	@JsonProperty("EXCEPTION")

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cn.bx.bframe.common.config.AppConstants;
+import cn.bx.bframe.entity.DataMessage;
 import cn.bx.bframe.mapper.SqlMapperTemplet;
 
 /**
@@ -32,7 +33,7 @@ public class CommonController {
 	 * 常量 js获取系统常量,使用json注解为js初始化调用
 	 */
 	@RequestMapping("/constrants")
-	public @ResponseBody Map<String,Object> getConstrants() {
+	public @ResponseBody DataMessage getConstrants() {
 		Map<String,Object> ret = new HashMap<String,Object>();
 		Field[] fields = AppConstants.class.getDeclaredFields();
 		for(Field f : fields){
@@ -44,32 +45,32 @@ public class CommonController {
 				e.printStackTrace();
 			}
 		}
-		return ret;
+		return DataMessage.data(ret);
 	}
 	/*
 	 * 根据sqlMapper中的stmID获取数据数据
 	 */
 	@RequestMapping("/selectArrayByStmID/{stmid}")
 	@SuppressWarnings("unchecked")
-	public @ResponseBody List<Map<String,Object>> queryArrayByStmID(@PathVariable("stmid") String stmid,@RequestBody Map<String,Object> parameter) {
-		return (List<Map<String, Object>>) sqlMapperTemplet.selectList(stmid, getParam(parameter));
+	public @ResponseBody DataMessage queryArrayByStmID(@PathVariable("stmid") String stmid,@RequestBody Map<String,Object> parameter) {
+		return DataMessage.data(sqlMapperTemplet.selectList(stmid, getParam(parameter)));
 	}
 	
 	/*
 	 * 根据sqlMapper中的stmID获取数据数据
 	 */
 	@RequestMapping("/selectMapByStmID/{stmid}")
-	public @ResponseBody Map<String,Object> queryMapByStmID(@PathVariable("stmid") String stmid,@RequestBody Map<String,Object> parameter) {
-		return sqlMapperTemplet.selectMap(stmid, getParam(parameter));
+	public @ResponseBody DataMessage queryMapByStmID(@PathVariable("stmid") String stmid,@RequestBody Map<String,Object> parameter) {
+		return DataMessage.data(sqlMapperTemplet.selectMap(stmid, getParam(parameter)));
 	}
 	
 	/*
 	 * 根据sqlMapper中的stmID获取数据数据
 	 */
 	@RequestMapping("/selectMapListByStmID/{stmid}")
-	public @ResponseBody Map<String,Object> queryMapListByStmID(@PathVariable("stmid") String stmid,@RequestBody Map<String,Object> parameter) {
-		return sqlMapperTemplet.selectMapList(stmid,  getParam(parameter),
-				String.valueOf(parameter.get("key")));
+	public @ResponseBody DataMessage queryMapListByStmID(@PathVariable("stmid") String stmid,@RequestBody Map<String,Object> parameter) {
+		return DataMessage.data(sqlMapperTemplet.selectMapList(stmid,  getParam(parameter),
+				String.valueOf(parameter.get("key"))));
 	}
 	
 	@SuppressWarnings({ "unchecked"})

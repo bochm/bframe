@@ -2,9 +2,9 @@ package cn.bx.bframe.entity;
 
 import java.io.Serializable;
 
-import cn.bx.bframe.common.config.AppConstants;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import cn.bx.bframe.common.config.AppConstants;
 
 public class DataMessage implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -36,23 +36,26 @@ public class DataMessage implements Serializable{
 	public void setData(Object data) {
 		this.data = data;
 	}
-	@JsonProperty(AppConstants.RET_STATUS)
+	@JsonProperty(value=AppConstants.RET_STATUS)
 	public String getStatus() {
 		return status;
 	}
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	@JsonProperty("OK")
+	/*@JsonProperty("OK")
 	public boolean isSeccuss(){
 		return AppConstants.RET_SECCUSS.equals(status);
 	}
 	@JsonProperty("ERROR")
 	public boolean isErr(){
 		return !AppConstants.RET_SECCUSS.equals(status);
-	}
+	}*/
 	public static DataMessage success(String message,Object data){
 		return new DataMessage(message,data,AppConstants.RET_SECCUSS); 
+	}
+	public static DataMessage data(Object data){
+		return new DataMessage(null,data,AppConstants.RET_SECCUSS); 
 	}
 	public static DataMessage error(String message,Object data){
 		return new DataMessage(message,data,AppConstants.RET_ERROR); 
