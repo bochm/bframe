@@ -5,12 +5,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import cn.bx.bframe.common.config.AppConstants;
-import cn.bx.bframe.common.util.IdGen;
 import cn.bx.system.utils.UserUtils;
 
 public class BaseBean implements Serializable {
@@ -23,15 +21,7 @@ public class BaseBean implements Serializable {
 	protected Date updateDate;	// 更新日期
 	protected int sort; //排序编号
 	protected String status;//状态  1启用  0停用
-	protected String form_action;//表单提交操作 add save delete
-	@JsonIgnore
-	public String getForm_action() {
-		return form_action;
-	}
-
-	public void setForm_action(String form_action) {
-		this.form_action = form_action;
-	}
+	//protected String form_action;//表单提交操作 add save delete 改为mybatis插件自动生成
 
 	public String getRemarks() {
 		return remarks;
@@ -103,12 +93,7 @@ public class BaseBean implements Serializable {
 	}
 	
 	public String getId(){
-		if(isNewRecord()) setId(IdGen.uuid());
-		return this.id;
-	}
-	@JsonIgnore
-	public boolean isNewRecord() {
-		return "add".equals(form_action) && StringUtils.isEmpty(this.id);
+		return id;
 	}
 
 	

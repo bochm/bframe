@@ -37,5 +37,7 @@
 	        <!-- always总是返回PageInfo类型,check检查返回类型是否为PageInfo,none返回Page -->
 	        <property name="returnPageInfo" value="none"/>
 		</plugin>
+		<plugin interceptor="cn.bx.bframe.entity.interceptor.IdInterceptor">
+		</plugin>
 	</plugins>
 </configuration>
