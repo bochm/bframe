@@ -2,7 +2,6 @@ package cn.bx.xweb.controller;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -51,7 +50,6 @@ public class CommonController {
 	 * 根据sqlMapper中的stmID获取数据数据
 	 */
 	@RequestMapping("/selectArrayByStmID/{stmid}")
-	@SuppressWarnings("unchecked")
 	public @ResponseBody DataMessage queryArrayByStmID(@PathVariable("stmid") String stmid,@RequestBody Map<String,Object> parameter) {
 		return DataMessage.data(sqlMapperTemplet.selectList(stmid, getParam(parameter)));
 	}
