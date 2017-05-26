@@ -42,7 +42,7 @@ public abstract class TreeBean<T extends BaseBean> extends BaseBean{
 		if (parent != null && parentId == null){
 			parentId = parent.getId();
 		}
-		return StringUtils.isNotEmpty(parentId) ? parentId : "";
+		return StringUtils.isNotEmpty(parentId) ? parentId : "-1";
 	}
 
 	public void setParentId(String parentId) {

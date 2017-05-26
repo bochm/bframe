@@ -38,6 +38,12 @@
 	        <property name="returnPageInfo" value="none"/>
 		</plugin>
 		<plugin interceptor="cn.bx.bframe.entity.interceptor.IdInterceptor">
+			<!-- id生成方式 uuid（java uuid）或者idworker(twitter idworker) -->
+			<property name="idGenerator" value="idworker"/>
+			<!-- idworker方式使用的工作中心ID（0~31） -->
+			<property name="workerId" value="0"/>
+			<!-- idworker方式使用的数据中心ID（0~31） -->
+			<property name="datacenterId" value="0"/>
 		</plugin>
 	</plugins>
 </configuration>

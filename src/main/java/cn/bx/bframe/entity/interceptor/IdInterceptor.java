@@ -19,25 +19,20 @@ import cn.bx.bframe.entity.BaseBean;
     		method = "update",  
             args = {MappedStatement.class,Object.class})}) 
 public class IdInterceptor implements Interceptor{
-
+	private  IdGen idGen;
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		MappedStatement statement = (MappedStatement) invocation.getArgs()[0];
 		//只有insert标签会自动设置id
-		System.out.println("##########"+statement.getKeyGenerator().getClass().getSimpleName());
 		if(statement.getSqlCommandType().compareTo(SqlCommandType.INSERT) == 0 &&
 				"NoKeyGenerator".equals(statement.getKeyGenerator().getClass().getSimpleName())){
 			Object parameter = invocation.getArgs()[1];
 			if(parameter instanceof BaseBean){
 				BaseBean bean = (BaseBean)parameter;
 				if(StringUtils.isEmpty(bean.getId()))
-					bean.setId(IdGen.uuid());
+					bean.setId(idGen.getId());
 			}
 		}
-		
-		
-		
-		
 		return invocation.proceed();
 	}
 
@@ -48,8 +43,14 @@ public class IdInterceptor implements Interceptor{
 
 	@Override
 	public void setProperties(Properties properties) {
-		// TODO Auto-generated method stub
-		
+		String idGenerator = properties.getProperty("idGenerator");
+		if("idworker".equalsIgnoreCase(idGenerator)){
+			long workerId = Long.parseLong(StringUtils.isEmpty(properties.getProperty("idGenerator")) ? "0" : properties.getProperty("workerId"));
+			long datacenterId = Long.parseLong(StringUtils.isEmpty(properties.getProperty("datacenterId")) ? "0" : properties.getProperty("datacenterId"));
+			this.idGen = new IdGen(workerId,datacenterId);
+		}else{
+			this.idGen = new IdGen();
+		}
 	}
 
 }
