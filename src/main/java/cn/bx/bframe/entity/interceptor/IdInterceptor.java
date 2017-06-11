@@ -1,5 +1,6 @@
 package cn.bx.bframe.entity.interceptor;
 
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.ibatis.executor.Executor;
@@ -10,6 +11,7 @@ import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.session.defaults.DefaultSqlSession;
 import org.springframework.util.StringUtils;
 
 import cn.bx.bframe.common.util.IdGen;
@@ -21,16 +23,32 @@ import cn.bx.bframe.entity.BaseBean;
 public class IdInterceptor implements Interceptor{
 	private  IdGen idGen;
 	@Override
+	@SuppressWarnings("unchecked")
 	public Object intercept(Invocation invocation) throws Throwable {
 		MappedStatement statement = (MappedStatement) invocation.getArgs()[0];
 		//只有insert标签会自动设置id
 		if(statement.getSqlCommandType().compareTo(SqlCommandType.INSERT) == 0 &&
 				"NoKeyGenerator".equals(statement.getKeyGenerator().getClass().getSimpleName())){
 			Object parameter = invocation.getArgs()[1];
+			System.out.println("#######"+(parameter.getClass()));
 			if(parameter instanceof BaseBean){
 				BaseBean bean = (BaseBean)parameter;
 				if(StringUtils.isEmpty(bean.getId()))
 					bean.setId(idGen.getId());
+			}else if(parameter instanceof DefaultSqlSession.StrictMap){
+				
+				DefaultSqlSession.StrictMap<Object> paraMap = (DefaultSqlSession.StrictMap<Object>)parameter;
+				if(paraMap.containsKey("list")){
+					List<Object> beans = (List<Object>)paraMap.get("list");
+					for(Object bean : beans){
+						if(bean instanceof BaseBean){
+							BaseBean b = (BaseBean)bean;
+							if(StringUtils.isEmpty(b.getId())) b.setId(idGen.getId());
+						}
+					}
+				}
+				
+				
 			}
 		}
 		return invocation.proceed();
