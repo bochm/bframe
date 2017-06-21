@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 
 /**
@@ -63,6 +64,9 @@ public class JsonMapper extends ObjectMapper{
 				jgen.writeString(StringEscapeUtils.unescapeHtml4(value));
 			}
         }));
+		//长整形转换为字符串,避免js端获取数据精度问题
+		this.registerModule(new SimpleModule().addSerializer(Long.class,ToStringSerializer.instance));
+        this.registerModule(new SimpleModule().addSerializer(Long.TYPE,ToStringSerializer.instance));
 		// 设置时区
 		this.setTimeZone(TimeZone.getDefault());//getTimeZone("GMT+8:00")
 	}
